@@ -2,9 +2,9 @@
 #include "RTClib.h"
 
 
-#define setHour 0
-#define setMinute 0
-#define deltaTime 10 //minutes
+#define setHour 10
+#define setMinute 40
+#define deltaTime 30 //minutes
 
 RTC_DS3231 rtc;
 RTC_DATA_ATTR uint8_t currTime[2] = {};
@@ -27,6 +27,9 @@ void setup() {
   // digitalWrite(23, HIGH); // Turn on vibration motor
   // delay(1000);
   // digitalWrite(23, LOW); // Turn off vibration motor
+  digitalWrite(2, HIGH);
+  delay(1000);
+  digitalWrite(2, LOW);
 
   while (!rtc.begin()) {
     Serial.println("Couldn't find RTC");
@@ -34,14 +37,18 @@ void setup() {
     while (1) delay(10);
   }
   if (!hasInit) {
+
+    
+
     currTime[0] = rtc.now().hour();
     currTime[1] = rtc.now().minute();
-    setTime[0] = setHour;
+    setTime[0] = (setHour);
     setTime[1] = setMinute;
     hasInit = true;
   }
   currTime[0] = rtc.now().hour();
   currTime[1] = rtc.now().minute();
+  Serial.println("Current time: " + String(currTime[0]) + ":" + String(currTime[1]));
 
   if (rtc.lostPower()) {
     Serial.println("RTC lost power, let's set the time!");
@@ -66,8 +73,10 @@ void setup() {
     Serial.println("Alarm reached!");
     delay(1000);
     digitalWrite(23, HIGH); // Turn on vibration motor
+    digitalWrite(2,HIGH);
     delay(1000);
     digitalWrite(23, LOW); // Turn off vibration motor
+    digitalWrite(2,LOW);
     hasInit = false;
   }
   Serial.println("Checking alarm...");
